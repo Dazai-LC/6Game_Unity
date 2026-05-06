@@ -144,6 +144,18 @@ public class BubbleManager : MonoBehaviour
                 }
             }
 
+            if(AudioManager.Instance != null)
+            {
+                if(matchedBubbles.Count > 3 || currentChainCombo > 1)
+                {
+                    AudioManager.Instance.PlayComboPop();
+                }
+                else
+                {
+                    AudioManager.Instance.PlayPop3();
+                }
+            }
+
             foreach (Bubble b in matchedBubbles)
             {
                 // Truyền chuỗi combo vào Pop để sau này fen có thể làm âm thanh nổ to nhỏ theo Combo
@@ -177,22 +189,21 @@ public class BubbleManager : MonoBehaviour
     // ==========================================
     // 3. TÌM & RỤNG BÓNG MỒ CÔI
     // ==========================================
-    private void DropFloatingBubbles(List<Bubble> destroyedBubbles, List<Bubble> allSnapped)
+    private void DropFloatingBubbles(List<Bubble> destroyedBubbles,List<Bubble> allSnapped)
     {
         Queue<Bubble> roots = new Queue<Bubble>();
         HashSet<Bubble> connectedToCeiling = new HashSet<Bubble>();
-
-        foreach (Bubble b in allSnapped)
+        //Bước 1: chỉ tìm những quả dính trần(tuyệt đối chưa rụng ở đây)
+        foreach(Bubble b in allSnapped)
         {
             if (destroyedBubbles.Contains(b)) continue;
-
-            if (startPoint != null && Mathf.Abs(b.transform.localPosition.y - startPoint.localPosition.y) < (bubbleDiameter * 0.5f))
+            if(startPoint != null && Mathf.Abs(b.transform.localPosition.y - startPoint.localPosition.y) < (bubbleDiameter * 0.5f))
             {
                 roots.Enqueue(b);
                 connectedToCeiling.Add(b);
             }
         }
-
+        //Bước 2: thuật toán loang (BFS) tìm hàng xóm
         while (roots.Count > 0)
         {
             Bubble current = roots.Dequeue();
@@ -200,23 +211,26 @@ public class BubbleManager : MonoBehaviour
 
             foreach (Bubble neighbor in neighbors)
             {
-                if (!destroyedBubbles.Contains(neighbor) && !connectedToCeiling.Contains(neighbor))
+                if(!destroyedBubbles.Contains(neighbor) && !connectedToCeiling.Contains(neighbor))
                 {
                     connectedToCeiling.Add(neighbor);
                     roots.Enqueue(neighbor);
                 }
             }
         }
-
-        foreach (Bubble b in allSnapped)
+        //Bước 3: Xử lý rụng bóng và âm thanh
+        //Giờ mới rà soát lại, quả bóng nào không có tên trong danh sách thì cho rụng
+        
+        foreach(Bubble b in allSnapped)
         {
-            if (!destroyedBubbles.Contains(b) && !connectedToCeiling.Contains(b))
+            if(!destroyedBubbles.Contains(b) && !connectedToCeiling.Contains(b))
             {
                 b.Drop();
+                //Gọi âm thanh rơi ở đây
+                if (AudioManager.Instance != null) AudioManager.Instance.PlayFall();
             }
         }
-
-        // GỌI KIỂM TRA THẮNG TẠI ĐÂY
+        // gọi kiểm tra thắng tại đây
         Invoke("CheckWinCondition", 0.3f);
     }
 
@@ -284,6 +298,11 @@ public class BubbleManager : MonoBehaviour
 
         if (bubbleCount <= 0)
         {
+            if(AudioManager.Instance != null)
+            {
+                AudioManager.Instance.StopBGM(); // tắt nhạc nền
+                AudioManager.Instance.PlayWin(); // bật nhạc chiến thắng
+            }
             Debug.Log("<color=green>!!! CHIẾN THẮNG !!! Đã dọn sạch bàn.</color>");
             Invoke("ShowWinUI", 0.5f);
         }

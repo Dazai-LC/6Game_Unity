@@ -185,4 +185,13 @@ public class Board : MonoBehaviour
         //Tải lại chính cái Scene hiện tại đang chơi:
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void GoToMainMenu()
+    {
+        // luôn giã đông thời gian phòng trường hợp người chơi thoát lúc gameOVer
+        Time.timeScale = 1f;
+        // Trở về MainMenuScene
+        SceneManager.LoadScene("MainMenuScene");
+
+    }
 }

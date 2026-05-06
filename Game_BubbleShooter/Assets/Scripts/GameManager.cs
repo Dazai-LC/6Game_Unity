@@ -20,11 +20,13 @@ public class GameManager : MonoBehaviour
     // ĐÂY LÀ HÀM MÀ DAZAI ĐANG TÌM KIẾM!
     public void GameOver()
     {
+        if(AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM(); // tắt nhạc nề
+            AudioManager.Instance.PlayLose();// bật nhạc thua
+        }
         Debug.Log("Dazai ơi, thua rồi!");
         endGamePanel.SetActive(true); // Hiện cái bảng thông báo lên
-        //resultText.text = "THUA RỒI NHA!";
-        //resultText.color = Color.red;
-
         Time.timeScale = 0f; // Dừng toàn bộ game lại (bóng ngừng bay)
     }
 

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Obstacle
+  - Bird
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - GroundLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BackGround_Sky
+    uniqueID: 3866638765
+    locked: 0
+  - name: BackGround_Far
+    uniqueID: 2091018599
+    locked: 0
+  - name: BackGround_Near
+    uniqueID: 3740732585
+    locked: 0
+  - name: Ground
+    uniqueID: 129200857
+    locked: 0
+  - name: Obstacles
+    uniqueID: 344707027
+    locked: 0
+  - name: Player
+    uniqueID: 304477095
+    locked: 0
+  m_RenderingLayers:
+  - Default

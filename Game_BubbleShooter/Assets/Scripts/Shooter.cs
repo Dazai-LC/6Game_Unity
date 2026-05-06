@@ -145,6 +145,9 @@ public class Shooter : MonoBehaviour
         // --- GỌI HUD: BÁO CÁO GIẢM ĐẠN ---
         if (HUDManager.Instance != null) HUDManager.Instance.UseAmmo();
 
+        // --- Gọi âm thanh bắn ---
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayShoot();
+
         Invoke(nameof(ReloadBubble), 0.5f);
     }
 

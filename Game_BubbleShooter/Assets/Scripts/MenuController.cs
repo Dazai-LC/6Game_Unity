@@ -3,6 +3,25 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    public bool isMainMenu = true;
+    public void Start()
+    {
+        if (isMainMenu)
+        {
+            AudioManager.Instance.PlayBGM(AudioManager.Instance.mainMenuBGM);
+        }
+        else
+        {
+            AudioManager.Instance.PlayBGM(AudioManager.Instance.menuLevelBGM);
+        }
+    }
+
+    // Mở màn chơi chính
+    public void PlayGame()
+    {
+        Time.timeScale = 1f; // rã đông trước khi vào game
+        SceneManager.LoadScene("MenuLevel");
+    }
     // Hàm quay về Main Menu
     public void GoToMainMenu()
     {
