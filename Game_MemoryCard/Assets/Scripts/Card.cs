@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
@@ -7,7 +8,8 @@ public class Card : MonoBehaviour
     public Sprite frontSprite;
     public Sprite backSprite;
 
-    private SpriteRenderer sr;
+    private Image cardImage;  // Dùng Image thay cho SpriteRenderer
+    private Button cardButton; // Dùng Button để nhận touch/click
     private bool isFlipped = false;
     private GameManager gameManager;
 
@@ -18,39 +20,32 @@ public class Card : MonoBehaviour
         backSprite = back;
         id = cardId;
 
-        sr = GetComponent<SpriteRenderer>();
-        sr.sprite = backSprite;
+        cardImage = GetComponent<Image>();
+        cardImage.sprite = backSprite;
 
-        // 🔥 auto fit collider theo sprite
-        BoxCollider2D col = GetComponent<BoxCollider2D>();
-        if (col != null)
+        // ======= Gán sự kiện OnClick bằng code======
+        cardButton = GetComponent<Button>();
+        if(cardButton != null)
         {
-            col.size = sr.bounds.size;
+            cardButton.onClick.RemoveAllListeners();
+            cardButton.onClick.AddListener(OnCardClick);
         }
     }
 
-    void Update()
+    //===== Hàm này thay thế hoàn toàn cho Update() và Raycast cũ
+    private void OnCardClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(!isFlipped && gameManager.CanClick())
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-
-            if (hit.collider != null && hit.collider.gameObject == gameObject)
-            {
-                if (!isFlipped && gameManager.CanClick())
-                {
-                    Flip();
-                    gameManager.OnCardClicked(this);
-                }
-            }
+            Flip();
+            gameManager.OnCardClicked(this);
         }
     }
 
     public void Flip()
     {
         isFlipped = !isFlipped;
-        sr.sprite = isFlipped ? frontSprite : backSprite;
+       cardImage.sprite = isFlipped ? frontSprite : backSprite;
     }
 
     public bool IsFlipped()
