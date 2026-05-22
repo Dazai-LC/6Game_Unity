@@ -91,7 +91,7 @@ public class Board : MonoBehaviour
     // ------------------------------------------------
 
     // Hàm Tổng Quản Tính Điểm
-    public void CheckForLines()
+    public void CheckForLines(bool isTSpin = false)
     {
         int linesCleared = 0;
         int y = 0;
